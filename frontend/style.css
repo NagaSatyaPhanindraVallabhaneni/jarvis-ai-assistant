@@ -1,0 +1,215 @@
+/* JARVIS HUD — Iron Man aesthetic: dark bg, cyan arc-reactor glow. */
+
+:root {
+  --cyan: #00d4ff;
+  --cyan-dim: rgba(0, 212, 255, 0.25);
+  --violet: #7b61ff;
+  --bg: #04090f;
+  --panel: rgba(8, 20, 32, 0.85);
+  --text: #d7e9f7;
+  --muted: #6f8aa3;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(0, 212, 255, 0.08), transparent),
+    var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.mono { font-family: "Consolas", "JetBrains Mono", monospace; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--cyan-dim);
+  background: rgba(4, 12, 20, 0.7);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand { font-size: 20px; letter-spacing: 4px; color: var(--cyan); font-weight: 700; }
+.brand small { color: var(--muted); font-size: 11px; letter-spacing: 2px; display: block; }
+
+.clock { text-align: right; color: var(--cyan); font-size: 14px; letter-spacing: 2px; }
+
+main {
+  display: grid;
+  grid-template-columns: 320px 1fr 300px;
+  gap: 18px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ---------- Arc reactor ---------- */
+.reactor-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+.reactor {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  margin-top: 12px;
+}
+.reactor .ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--cyan-dim);
+}
+.reactor .r1 { inset: 0;   animation: spin 14s linear infinite; border-top-color: var(--cyan); }
+.reactor .r2 { inset: 18px; animation: spin 10s linear infinite reverse; border-bottom-color: var(--cyan); }
+.reactor .r3 { inset: 38px; animation: spin 7s linear infinite; border-left-color: var(--violet); }
+.reactor .core {
+  position: absolute;
+  inset: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #eafcff 0%, var(--cyan) 45%, #015a7a 100%);
+  box-shadow: 0 0 40px var(--cyan), 0 0 90px var(--cyan-dim), inset 0 0 24px rgba(255,255,255,.5);
+  animation: pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse { 50% { transform: scale(1.06); box-shadow: 0 0 60px var(--cyan), 0 0 120px var(--cyan-dim); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--cyan-dim);
+  border-radius: 10px;
+  padding: 14px 16px;
+  backdrop-filter: blur(6px);
+}
+.panel h3 {
+  color: var(--cyan);
+  font-size: 12px;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--cyan-dim);
+  padding-bottom: 6px;
+}
+
+/* ---------- Boot log ---------- */
+#bootlog {
+  width: 100%;
+  max-height: 190px;
+  overflow-y: auto;
+  font-size: 12px;
+  color: var(--cyan);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* ---------- Stats ---------- */
+.stat { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; }
+.stat .bar { flex: 1; height: 6px; background: #0d2233; border-radius: 3px; margin: 6px 8px 0; overflow: hidden; }
+.stat .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--cyan), var(--violet)); border-radius: 3px; transition: width .6s; }
+.stat b { color: var(--cyan); min-width: 52px; text-align: right; }
+
+/* ---------- Waveform ---------- */
+#waveform { width: 100%; height: 90px; background: #04121c; border-radius: 8px; border: 1px solid var(--cyan-dim); }
+
+/* ---------- Chat ---------- */
+.chat-col { display: flex; flex-direction: column; min-height: 560px; }
+
+#chat {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 6px 2px;
+  max-height: 480px;
+}
+.msg {
+  max-width: 88%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  animation: rise .25s ease;
+  white-space: pre-wrap;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+.msg.jarvis {
+  align-self: flex-start;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid var(--cyan-dim);
+  border-left: 3px solid var(--cyan);
+}
+.msg.user {
+  align-self: flex-end;
+  background: rgba(123, 97, 255, 0.12);
+  border: 1px solid rgba(123, 97, 255, 0.4);
+  border-right: 3px solid var(--violet);
+}
+.msg .who { font-size: 10px; letter-spacing: 2px; color: var(--muted); display: block; margin-bottom: 4px; }
+.msg.typing { color: var(--cyan); }
+
+.input-row { display: flex; gap: 10px; margin-top: 12px; }
+#cmd {
+  flex: 1;
+  background: #06121d;
+  border: 1px solid var(--cyan-dim);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 15px;
+  outline: none;
+}
+#cmd:focus { border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-dim); }
+
+button {
+  background: transparent;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: .2s;
+}
+button:hover { background: var(--cyan); color: #04121c; box-shadow: 0 0 18px var(--cyan-dim); }
+button.active { background: var(--cyan); color: #04121c; }
+button.danger { color: #ff7b7b; border-color: #ff7b7b; }
+button.danger:hover { background: #ff7b7b; color: #1c0404; }
+
+.controls { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+.hint { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+.hint kbd { background: #0d2233; border: 1px solid var(--cyan-dim); border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--cyan); }
+
+/* ---------- Settings ---------- */
+.settings-grid { display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+.settings-grid label { color: var(--muted); letter-spacing: 1px; font-size: 11px; }
+.settings-grid input, .settings-grid select {
+  background: #06121d;
+  border: 1px solid var(--cyan-dim);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  width: 100%;
+  outline: none;
+}
+.mode-toggle { display: flex; gap: 8px; }
+.mode-toggle button { flex: 1; font-size: 12px; padding: 8px; }
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 18px;
+  border-top: 1px solid var(--cyan-dim);
+  letter-spacing: 1px;
+}
+
+@media (max-width: 1000px) {
+  main { grid-template-columns: 1fr; }
+}
