@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JARVIS — AI Assistant Interface</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="brand mono">J.A.R.V.I.S.<small>AI ASSISTANT INTERFACE</small></div>
+  <div class="clock mono"><span id="clock">--:--:--</span><br /><span id="modeLabel" style="font-size:11px;color:#6f8aa3">OFFLINE COMMAND MODE</span></div>
+</header>
+
+<main>
+  <!-- LEFT: reactor + stats -->
+  <div class="reactor-wrap">
+    <div class="reactor">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="core" id="reactorCore"></div>
+    </div>
+    <div class="panel" style="width:100%">
+      <h3 class="mono">SYSTEM DIAGNOSTICS</h3>
+      <div class="stat"><span>CPU</span><div class="bar"><i id="cpuBar" style="width:0%"></i></div><b id="cpuVal">--%</b></div>
+      <div class="stat"><span>MEM</span><div class="bar"><i id="memBar" style="width:0%"></i></div><b id="memVal">--%</b></div>
+      <div class="stat"><span>DISK</span><div class="bar"><i id="diskBar" style="width:0%"></i></div><b id="diskVal">--%</b></div>
+    </div>
+    <div class="panel" style="width:100%">
+      <h3 class="mono">VOICE INPUT</h3>
+      <canvas id="waveform"></canvas>
+      <div class="hint">Mic waveform — live audio visualizer.</div>
+    </div>
+  </div>
+
+  <!-- CENTER: chat -->
+  <div class="chat-col">
+    <div class="panel" style="flex:1;display:flex;flex-direction:column">
+      <h3 class="mono">COMMUNICATIONS LOG</h3>
+      <div id="chat"></div>
+      <div class="input-row">
+        <input id="cmd" class="mono" placeholder="Type a command, sir… (or speak)" autocomplete="off" />
+        <button id="sendBtn">SEND</button>
+      </div>
+      <div class="controls">
+        <button id="pttBtn" title="Push to talk">🎤 PUSH TO TALK</button>
+        <button id="wakeBtn" title="Continuous listening with wake phrase">👂 WAKE LISTENING</button>
+        <button id="muteBtn" title="Toggle voice output">🔊 VOICE ON</button>
+      </div>
+      <div class="hint">
+        Voice tips: click <kbd>WAKE LISTENING</kbd>, allow the microphone, then say
+        <kbd>“Hey Jarvis, what time is it”</kbd>. Interim transcripts appear as you speak.
+        Offline mode understands: <i>time, system status, calculate, search, notes, timers, jokes</i>.
+      </div>
+    </div>
+    <div class="panel">
+      <h3 class="mono">BOOT SEQUENCE</h3>
+      <div id="bootlog" class="mono"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: settings -->
+  <div>
+    <div class="panel">
+      <h3 class="mono">SETTINGS</h3>
+      <div class="settings-grid">
+        <label>BRAIN MODE</label>
+        <div class="mode-toggle">
+          <button id="modeOffline" class="active">OFFLINE</button>
+          <button id="modeLLM">LLM</button>
+        </div>
+        <div class="hint" id="modeDesc">Offline command mode: fast, private, rule-based routing. No key needed.</div>
+        <label>LLM BASE URL (OpenAI-compatible)</label>
+        <input id="llmUrl" class="mono" placeholder="https://api.openai.com/v1" />
+        <label>LLM API KEY (browser only — never sent to this server)</label>
+        <input id="llmKey" type="password" class="mono" placeholder="sk-…" />
+        <label>MODEL</label>
+        <input id="llmModel" class="mono" placeholder="gpt-4o-mini" />
+        <button id="saveSettings">SAVE SETTINGS</button>
+        <div class="hint">Tip: point the base URL at a local <b>Ollama</b> (<span class="mono">http://localhost:11434/v1</span>) and leave the key as anything — free, private LLM brain.</div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <h3 class="mono">ABOUT</h3>
+      <div class="hint">
+        JARVIS runs <b>two modes</b>: offline command mode (honest rule-based intents, works with zero setup)
+        and LLM mode (bring your own key, real tool-calling loop). Your key lives only in this browser's
+        localStorage and goes straight to your chosen endpoint.
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="mono">J.A.R.V.I.S. · prototype interface · offline mode is rule-based by design</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
